@@ -56,22 +56,15 @@ public final class ProtoConverter {
         );
     }
 
-    private static NotificationPriority toNotificationPriority(NotificationPriorityProto priority) {
-        return switch (priority) {
-            case LOW -> NotificationPriority.LOW;
-            case MEDIUM -> NotificationPriority.MEDIUM;
-            case HIGH -> NotificationPriority.HIGH;
-            case URGENT -> NotificationPriority.URGENT;
-        };
+    private static NotificationPriority toNotificationPriority(NotificationPriority priority) {
+        if (priority == NotificationPriority.UNRECOGNIZED) {
+            throw new IllegalArgumentException("Unrecognized priority value");
+        }
+        return priority;
     }
 
-    private static NotificationPriorityProto toProtoPriority(NotificationPriority priority) {
-        return switch (priority) {
-            case LOW -> NotificationPriorityProto.LOW;
-            case MEDIUM -> NotificationPriorityProto.MEDIUM;
-            case HIGH -> NotificationPriorityProto.HIGH;
-            case URGENT -> NotificationPriorityProto.URGENT;
-        };
+    private static NotificationPriority toProtoPriority(NotificationPriority priority) {
+        return priority;
     }
 
     // Sensor reading conversions
@@ -128,21 +121,22 @@ public final class ProtoConverter {
                 .build();
     }
 
-    private static ChatMessageType toChatMessageType(MessageTypeProto type) {
+    private static ChatMessageType toChatMessageType(MessageType type) {
         return switch (type) {
             case TEXT -> ChatMessageType.TEXT;
             case JOIN -> ChatMessageType.JOIN;
             case LEAVE -> ChatMessageType.LEAVE;
             case SYSTEM -> ChatMessageType.SYSTEM;
+            case UNRECOGNIZED -> throw new IllegalArgumentException("Unrecognized message type value");
         };
     }
 
-    private static MessageTypeProto toProtoMessageType(ChatMessageType type) {
+    private static MessageType toProtoMessageType(ChatMessageType type) {
         return switch (type) {
-            case TEXT -> MessageTypeProto.TEXT;
-            case JOIN -> MessageTypeProto.JOIN;
-            case LEAVE -> MessageTypeProto.LEAVE;
-            case SYSTEM -> MessageTypeProto.SYSTEM;
+            case TEXT -> MessageType.TEXT;
+            case JOIN -> MessageType.JOIN;
+            case LEAVE -> MessageType.LEAVE;
+            case SYSTEM -> MessageType.SYSTEM;
         };
     }
 }

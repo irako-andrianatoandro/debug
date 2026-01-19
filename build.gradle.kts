@@ -1,7 +1,5 @@
 plugins {
-    id("java")
-    id("org.springframework.boot") version "3.3.5"
-    id("io.spring.dependency-management") version "1.1.6"
+    id("java")  
     id("com.google.protobuf") version "0.9.5"
 }
 
@@ -13,8 +11,11 @@ repositories {
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2") 
+    
+    // Logging
+    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation("org.slf4j:slf4j-simple:2.0.9")
     
     // gRPC dependencies
     implementation("io.grpc:grpc-netty-shaded:1.60.1")
