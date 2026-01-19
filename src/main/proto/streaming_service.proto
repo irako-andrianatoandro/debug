@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package dev.irako.topics.grpc;
+
+option java_multiple_files = true;
+option java_package = "dev.irako.topics.grpc.model";
+option java_outer_classname = "StreamingServiceProto";
+
+// Service demonstrating all gRPC streaming patterns
+service StreamingService {
+  // Unary RPC: single request, single response
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+
+  // Server streaming: single request, multiple responses
+  rpc SubscribeToNotifications (SubscribeRequest) returns (stream NotificationMessage);
+
+  // Client streaming: multiple requests, single response
+  rpc UploadSensorData (stream SensorReading) returns (AggregateResponse);
+
+  // Bidirectional streaming: multiple requests, multiple responses
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+// Unary RPC messages
+message MessageRequest {
+  string user_id = 1;
+  string content = 2;
+  int64 timestamp = 3;
+}
+
+message MessageResponse {
+  bool success = 1;
+  string message_id = 2;
+  string status = 3;
+}
+
+// Server streaming messages
+message SubscribeRequest {
+  string user_id = 1;
+  repeated string topics = 2; // Topics to subscribe to (e.g., "news", "updates", "alerts")
+}
+
+message NotificationMessage {
+  string notification_id = 1;
+  string topic = 2;
+  string title = 3;
+  string content = 4;
+  int64 timestamp = 5;
+  NotificationPriority priority = 6;
+}
+
+enum NotificationPriority {
+  LOW = 0;
+  MEDIUM = 1;
+  HIGH = 2;
+  URGENT = 3;
+}
+
+// Client streaming messages
+message SensorReading {
+  string sensor_id = 1;
+  double value = 2;
+  string unit = 3; // e.g., "celsius", "fahrenheit", "pascal"
+  int64 timestamp = 4;
+  string location = 5;
+}
+
+message AggregateResponse {
+  int32 total_readings = 1;
+  double average_value = 2;
+  double min_value = 3;
+  double max_value = 4;
+  string unit = 5;
+  int64 processing_time_ms = 6;
+}
+
+// Bidirectional streaming messages
+message ChatMessage {
+  string user_id = 1;
+  string username = 2;
+  string content = 3;
+  int64 timestamp = 4;
+  MessageType type = 5;
+}
+
+enum MessageType {
+  TEXT = 0;
+  JOIN = 1;
+  LEAVE = 2;
+  SYSTEM = 3;
+}
